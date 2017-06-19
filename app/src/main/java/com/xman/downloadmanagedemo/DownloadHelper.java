@@ -19,11 +19,18 @@ public class DownloadHelper {
 
     public DownloadService.DownloadServiceBind mDownloadServiceBinder;
     private boolean isConnected = false;
-    private Object o = new Object();
-    private Context context;
 
-    public DownloadHelper(Context context) {
-        this.context = context;
+    private Object o = new Object();
+
+    private static DownloadHelper instance;
+
+    public static DownloadHelper getInstance() {
+        if (instance == null) {
+            synchronized (DownloadHelper.class) {
+                instance = new DownloadHelper();
+            }
+        }
+        return instance;
     }
 
     private ServiceConnection connection = new ServiceConnection() {
@@ -61,21 +68,28 @@ public class DownloadHelper {
         ThreadPoolManage.getInstance().pauseMission(misson);
     }
 
+    /**
+     * 用户手动关闭
+     */
+    public void stopAllDownload() {
+        if (ThreadPoolManage.getInstance().getMissionCache() != null && ThreadPoolManage.getInstance().getMissionCache().size() > 0) {
+            ThreadPoolManage.getInstance().workSurrender();
+        }
+        DownloadHelper.getInstance().unbindDownloadService();
+    }
+
     public void download(final Misson misson) {
         new Thread() {
             @Override
             public void run() {
                 super.run();
                 LogUtils.e("--->服务活着吗" + isDownloadServiceRunning());
-                if (context == null) {
-                    return;
-                }
-                if (!isDownloadServiceRunning() && context != null) {
-                    context.startService(new Intent(context,
+                if (!isDownloadServiceRunning()) {
+                    Appctx.getInstance().startService(new Intent(Appctx.getInstance(),
                             DownloadService.class));
                 }
-                if (mDownloadServiceBinder == null || isConnected == false && context != null) {
-                    context.bindService(new Intent(context,
+                if (mDownloadServiceBinder == null || !isConnected) {
+                    Appctx.getInstance().bindService(new Intent(Appctx.getInstance(),
                                     DownloadService.class), connection,
                             Context.BIND_AUTO_CREATE);
                     synchronized (o) {
@@ -97,7 +111,7 @@ public class DownloadHelper {
      * 判断下载服务是否在运行
 	 */
     private boolean isDownloadServiceRunning() {
-        ActivityManager manager = (ActivityManager) context
+        ActivityManager manager = (ActivityManager) Appctx.getInstance()
                 .getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager
                 .getRunningServices(Integer.MAX_VALUE)) {
@@ -110,8 +124,12 @@ public class DownloadHelper {
     }
 
     public void unbindDownloadService() {
-        if (isDownloadServiceRunning() && isConnected && connection != null && context != null) {
-            context.unbindService(connection);
+        LogUtils.e("--->服务活着吗" + isDownloadServiceRunning());
+        if (isDownloadServiceRunning()) {
+            Appctx.getInstance().unbindService(connection);
+            LogUtils.e("--->服务活着吗" + isDownloadServiceRunning());
         }
     }
+
+
 }

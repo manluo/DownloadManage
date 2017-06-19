@@ -1,13 +1,18 @@
 package com.xman.downloadmanagedemo;
 
 import android.app.Application;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 
 /**
  * Created by nieyunlong on 17/6/12.
  */
 
 public class Appctx extends Application {
+
     private static Appctx appctx;
 
     @Override

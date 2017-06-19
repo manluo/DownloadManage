@@ -3,7 +3,6 @@ package com.xman.downloadmanagedemo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -83,8 +82,8 @@ public class ThreadPoolManage {
      * @return
      */
     public ArrayList<Misson> getMissionCache() {
+        listMission = new ArrayList<>();
         if (mMissionBook.size() > 0) {
-            listMission = new ArrayList<>();
             for (Map.Entry<String, Misson> item : mMissionBook.entrySet()) {
                 if (item.getValue() != null) {
                     listMission.add(item.getValue());

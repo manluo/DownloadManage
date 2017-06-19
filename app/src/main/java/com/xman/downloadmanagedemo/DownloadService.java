@@ -60,6 +60,10 @@ public class DownloadService extends Service implements Misson.MissonListener<Mi
     public void onSuccess(Misson misson) {
         LogUtils.e("---->downloadService====>onSuccess" + misson.getmDownloadUrl());
         sendMissionBroadCast(misson);
+        //如果下载任务没有了 自杀
+        if (ThreadPoolManage.getInstance().getMissionCache() == null || ThreadPoolManage.getInstance().getMissionCache().size() <= 0) {
+            DownloadHelper.getInstance().unbindDownloadService();
+        }
     }
 
     @Override
@@ -88,7 +92,6 @@ public class DownloadService extends Service implements Misson.MissonListener<Mi
         if (misson == null) {
             return;
         }
-
         ThreadPoolManage.getInstance().addMisson(misson);
         misson.registerMissonListener(new MissonSave());
         misson.registerMissonListener(new MissionListenerForNotification(DownloadService.this));
@@ -98,8 +101,7 @@ public class DownloadService extends Service implements Misson.MissonListener<Mi
 
     @Override
     public void onDestroy() {
-        LogUtils.e("---->服务死掉====>onDestroy");
-        ThreadPoolManage.getInstance().workSurrender();
+        LogUtils.e("---->服务死掉===>onDestroy===>重新启动服务");
         super.onDestroy();
     }
 
