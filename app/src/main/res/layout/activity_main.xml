@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_skip_download_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:gravity="center"
+        android:text="跳转到下载列表" />
+
+    <!--<com.xman.downloadmanagedemo.widget.SaundProgressBar-->
+    <!--android:id="@+id/regularprogressbar"-->
+    <!--style="@style/Widget.ProgressBar.RegularProgressBar"-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="50dp"-->
+    <!--android:paddingLeft="15dip"-->
+    <!--android:paddingRight="15dip"-->
+    <!--saund:offset="3dip"-->
+    <!--saund:textSize="10sp" />-->
+
+    <!--<Button-->
+    <!--android:id="@+id/btn_start"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:layout_marginTop="20dp"-->
+    <!--android:gravity="center"-->
+    <!--android:text="下载" />-->
+    <!--<Button-->
+    <!--android:id="@+id/btn_pause"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:layout_marginTop="20dp"-->
+    <!--android:gravity="center"-->
+    <!--android:text="暂停" />-->
+    <!--<Button-->
+    <!--android:id="@+id/btn_resume"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:layout_marginTop="20dp"-->
+    <!--android:gravity="center"-->
+    <!--android:text="重新下载" />-->
+
+    <!--<Button-->
+    <!--android:id="@+id/btn_shutdown"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:layout_marginTop="20dp"-->
+    <!--android:gravity="center"-->
+    <!--android:text="关闭所有的网络请求" />-->
+
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+</LinearLayout>
