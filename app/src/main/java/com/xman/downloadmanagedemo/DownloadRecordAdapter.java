@@ -56,8 +56,25 @@ public class DownloadRecordAdapter extends DownloadUIBaseAdapter<Misson> {
 
         viewHolder.item_download_name.setText(data.getSaveName());
         LogUtils.e("====>数据内容" + data.getDownloadUiStatus());
-        viewHolder.item_download_status.setText(data.getDownloadUiStatus().getDownloadMsg());
-        viewHolder.item_download_btn_pause_download.setText(data.getDownloadUiStatus().getDownloadMsg());
+
+        if (data.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_PAUSE) { //暂停 按钮是恢复下载 文案描述是暂停下载
+            viewHolder.item_download_btn_pause_download.setText("恢复下载");
+            viewHolder.item_download_status.setText(data.getDownloadUiStatus().getDownloadMsg());
+        } else if (data.getDownloadUiStatus() == DownloadUiStatus.DOWNLOADING) { //正在下载
+            viewHolder.item_download_btn_pause_download.setText(DownloadUiStatus.DOWNLOADING.getDownloadMsg());
+            viewHolder.item_download_status.setText(DownloadUiStatus.DOWNLOADING.getDownloadMsg());
+        } else if (data.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_FAILED) { //下载失败
+            viewHolder.item_download_btn_pause_download.setText("恢复下载");
+            viewHolder.item_download_status.setText(data.getDownloadUiStatus().getDownloadMsg());
+        } else if (data.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_SUCCESS) {
+            viewHolder.item_download_btn_pause_download.setText(DownloadUiStatus.DOWNLOAD_SUCCESS.getDownloadMsg());
+            viewHolder.item_download_btn_pause_download.setEnabled(false);
+            viewHolder.item_download_status.setText(data.getDownloadUiStatus().getDownloadMsg());
+        } else if (data.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_WAIT || data.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_READ) {
+            viewHolder.item_download_btn_pause_download.setText(DownloadUiStatus.DOWNLOAD_WAIT.getDownloadMsg());
+            viewHolder.item_download_btn_pause_download.setEnabled(false);
+            viewHolder.item_download_status.setText(data.getDownloadUiStatus().getDownloadMsg());
+        }
         final ViewHolder finalViewHolder = viewHolder;
         finalViewHolder.item_download_btn_pause_download.setVisibility(View.VISIBLE);
 
@@ -120,6 +137,24 @@ public class DownloadRecordAdapter extends DownloadUIBaseAdapter<Misson> {
     public void setDataToView(ViewHolder viewHolder, int itemIndex) {
         Misson dataItem = getItem(itemIndex);
         viewHolder.item_download_regularprogressbar.setProgress(dataItem.getProgressCurrent());
-        viewHolder.item_download_status.setText(dataItem.getDownloadUiStatus().getDownloadMsg());
+//        viewHolder.item_download_status.setText(dataItem.getDownloadUiStatus().getDownloadMsg());
+        if (dataItem.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_PAUSE) { //暂停 按钮是恢复下载 文案描述是暂停下载
+            viewHolder.item_download_btn_pause_download.setText("恢复下载");
+            viewHolder.item_download_status.setText(dataItem.getDownloadUiStatus().getDownloadMsg());
+        } else if (dataItem.getDownloadUiStatus() == DownloadUiStatus.DOWNLOADING) { //正在下载
+            viewHolder.item_download_btn_pause_download.setText(DownloadUiStatus.DOWNLOADING.getDownloadMsg());
+            viewHolder.item_download_status.setText(DownloadUiStatus.DOWNLOADING.getDownloadMsg());
+        } else if (dataItem.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_FAILED) { //下载失败
+            viewHolder.item_download_btn_pause_download.setText("恢复下载");
+            viewHolder.item_download_status.setText(dataItem.getDownloadUiStatus().getDownloadMsg());
+        } else if (dataItem.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_SUCCESS) {
+            viewHolder.item_download_btn_pause_download.setText(DownloadUiStatus.DOWNLOAD_SUCCESS.getDownloadMsg());
+            viewHolder.item_download_btn_pause_download.setEnabled(false);
+            viewHolder.item_download_status.setText(dataItem.getDownloadUiStatus().getDownloadMsg());
+        } else if (dataItem.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_WAIT || dataItem.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_READ) {
+            viewHolder.item_download_btn_pause_download.setText(DownloadUiStatus.DOWNLOAD_WAIT.getDownloadMsg());
+            viewHolder.item_download_btn_pause_download.setEnabled(false);
+            viewHolder.item_download_status.setText(dataItem.getDownloadUiStatus().getDownloadMsg());
+        }
     }
 }

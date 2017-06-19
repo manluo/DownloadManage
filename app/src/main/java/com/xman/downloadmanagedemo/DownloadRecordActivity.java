@@ -38,8 +38,13 @@ public class DownloadRecordActivity extends AppCompatActivity {
                 for (int i = 0; i < downloadInfos.size(); i++) {
                     DownloadInfo downloadItem = downloadInfos.get(i);
                     Misson misson = new Misson(downloadItem.getDownloadUrl(), downloadItem.getCurrentSize(), downloadItem.getMFileSize(), downloadItem.getSaveDir(), downloadItem.getSaveName());
-                    misson.setDownloadUiStatus(DownloadUiStatus.DOWNLOAD_RESUME);
-                    misson.setCancel(true);
+                    int downloadStatusDao = downloadItem.getDownloadStatus();
+                    if (downloadStatusDao == DownloadInfo.DownloadStatus.DOWNLOADING.ordinal()) { //正在下载
+                        misson.setDownloadUiStatus(DownloadUiStatus.DOWNLOADING);
+                    } else if (downloadStatusDao == DownloadInfo.DownloadStatus.DOWNLOAD_PAUSE.ordinal() || downloadStatusDao == DownloadInfo.DownloadStatus.DOWNLOAD_ERROR.ordinal()) { //暂停下载
+                        misson.setDownloadUiStatus(DownloadUiStatus.DOWNLOAD_PAUSE);
+                        misson.setCancel(true);
+                    }
                     listDownload.add(misson);
 //                    downloadHelper.startDownload(misson);
                 }
@@ -51,7 +56,13 @@ public class DownloadRecordActivity extends AppCompatActivity {
                 for (int y = 0; y < listCacheMission.size(); y++) {
                     if (downloadItem.getDownloadUrl().equals(listCacheMission.get(y).getmDownloadUrl())) {
                         Misson mission = listCacheMission.get(y);
-                        mission.setDownloadUiStatus(DownloadUiStatus.DOWNLOADING);
+                        if (mission.isDone()) //已经结束了
+                        {
+                            mission.setDownloadUiStatus(DownloadUiStatus.DOWNLOAD_PAUSE);
+                            mission.setCancel(true);
+                        } else {
+                            mission.setDownloadUiStatus(DownloadUiStatus.DOWNLOADING);
+                        }
                         isFind = true;
                         listDownload.add(mission);
 //                        downloadHelper.startDownload(mission);
@@ -60,7 +71,7 @@ public class DownloadRecordActivity extends AppCompatActivity {
                 }
                 if (!isFind) {
                     Misson misson = new Misson(downloadItem.getDownloadUrl(), downloadItem.getCurrentSize(), downloadItem.getMFileSize(), downloadItem.getSaveDir(), downloadItem.getSaveName());
-                    misson.setDownloadUiStatus(DownloadUiStatus.DOWNLOAD_RESUME);  //所有可下载的 都是暂停状态 在UI展示是恢复下载
+                    misson.setDownloadUiStatus(DownloadUiStatus.DOWNLOAD_PAUSE);  //所有可下载的 都是暂停状态 在UI展示是恢复下载
                     misson.setCancel(true);
                     listDownload.add(misson);
                 }

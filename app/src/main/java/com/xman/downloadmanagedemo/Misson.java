@@ -19,10 +19,10 @@ import java.util.List;
  * 任务
  */
 
-public class Misson implements Runnable,Parcelable{
+public class Misson implements Runnable, Parcelable {
 
     public static int ID = 0;
-    private final int MissionID ; //用来通知
+    private final int MissionID; //用来通知
     private final static boolean IS_DEBUG = true;
     private final static String TAG = Misson.class.getSimpleName();
     /*下载的url*/
@@ -312,7 +312,6 @@ public class Misson implements Runnable,Parcelable{
     public int getMissionID() {
         return MissionID;
     }
-
 
 
     public void registerMissonListener(MissonListener<Misson> listener) {
