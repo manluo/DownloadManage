@@ -64,7 +64,7 @@ public class ThreadPoolManage {
         if (mMissionBook.containsKey(misson.getmDownloadUrl())) {
 //            mMissionBook.get(misson.getmDownloadUrl()).resume();
             LogUtils.e("--->恢复执行" + misson.getmDownloadUrl());
-            execute(misson);
+            execute(mMissionBook.get(misson.getmDownloadUrl()));
         }
     }
 

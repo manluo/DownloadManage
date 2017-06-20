@@ -84,8 +84,17 @@ public class DownloadHelper {
         download(misson);
     }
 
+
+    /**
+     *
+     * @param misson
+     */
     public void pauseDownload(Misson misson) {
         ThreadPoolManage.getInstance().pauseMission(misson);
+    }
+
+    public void resumeDownload(Misson misson) {
+        ThreadPoolManage.getInstance().resumeMission(misson);
     }
 
     /**

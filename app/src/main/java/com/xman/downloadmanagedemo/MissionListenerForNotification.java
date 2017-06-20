@@ -35,9 +35,6 @@ public class MissionListenerForNotification implements Misson.MissonListener<Mis
     @Override
     public void onStart(Misson misson) {
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        cancelPendingIntent = MissionActionReceiver.buildReceiverPendingIntent(context, MissionActionReceiver.MISSION_TYPE.CANCEL_MISSION, misson.getMissionID(), misson.getmDownloadUrl());
-        pausePendingIntent = MissionActionReceiver.buildReceiverPendingIntent(context, MissionActionReceiver.MISSION_TYPE.PAUSE_MISSION, misson.getMissionID(), misson.getmDownloadUrl());
-        resumePendingIntent = MissionActionReceiver.buildReceiverPendingIntent(context, MissionActionReceiver.MISSION_TYPE.RESUME_MISSION, misson.getMissionID(), misson.getmDownloadUrl());
 
         contentIntent = new Intent(context, DownloadRecordActivity.class);
         contentPendingIntent = PendingIntent.getActivity(context, 0, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -47,8 +44,6 @@ public class MissionListenerForNotification implements Misson.MissonListener<Mis
                 .setContentText("准备下载")
                 .setProgress(100, 100, true)
                 .setContentInfo("0%")
-                .addAction(R.drawable.ic_action_coffee, "暂停", pausePendingIntent)
-                .addAction(R.drawable.ic_action_cancel, "取消", cancelPendingIntent)
                 .setContentIntent(contentPendingIntent)
                 .setOngoing(true);
         notificationManager.notify(misson.getMissionID(), notifyBuilder.build());

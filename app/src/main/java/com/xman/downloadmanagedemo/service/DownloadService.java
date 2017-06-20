@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
+import com.xman.downloadmanagedemo.MissonListenerForNotification;
 import com.xman.downloadmanagedemo.utils.LogUtils;
 import com.xman.downloadmanagedemo.MissionListenerForNotification;
 import com.xman.downloadmanagedemo.Misson;
@@ -106,11 +107,12 @@ public class DownloadService extends Service implements Misson.MissonListener<Mi
             return;
         }
         misson.registerMissonListener(new MissonSave());
-        misson.registerMissonListener(new MissionListenerForNotification(DownloadService.this));
+        misson.registerMissonListener(new MissonListenerForNotification(DownloadService.this));
         misson.registerMissonListener(DownloadService.this);
         ThreadPoolManage.getInstance().addMisson(misson);
         ThreadPoolManage.getInstance().execute(misson);
     }
+
 
     @Override
     public void onDestroy() {

@@ -40,7 +40,7 @@ public class Misson implements Runnable, Parcelable {
     private String mSaveName;
     /*当前下载的进度*/
     private int progressCurrent = 0;
-    private List<MissonListener<Misson>> listObserver;
+    private ArrayList<MissonListener<Misson>> listObserver;
     /*下载通知ui的状态,初始状态等待下载*/
     private DownloadUiStatus downloadUiStatus = DownloadUiStatus.DOWNLOAD_WAIT;
     private final Object o = new Object();
@@ -98,7 +98,7 @@ public class Misson implements Runnable, Parcelable {
             }
             if (mDownloadedSize >= mFileSize && mFileSize > 0) {
                 setDownloadUiStatus(DownloadUiStatus.DOWNLOAD_SUCCESS);
-                printLog("---->下载成功了"+mDownloadedSize+",mFileSize"+mFileSize);
+                printLog("---->下载成功了" + mDownloadedSize + ",mFileSize" + mFileSize);
                 notifySuccess();
                 return;
             }
@@ -319,7 +319,7 @@ public class Misson implements Runnable, Parcelable {
 
     public void registerMissonListener(MissonListener<Misson> listener) {
         if (listener != null) {
-            if (!listObserver.contains(listener)) {
+            if (listObserver != null && !listObserver.contains(listener)) {
                 LogUtils.e("---->不包括这个listener" + listener);
                 listObserver.add(listener);
             }
@@ -372,6 +372,7 @@ public class Misson implements Runnable, Parcelable {
                 ", isDone=" + isDone +
                 '}';
     }
+
 
     @Override
     public int describeContents() {
