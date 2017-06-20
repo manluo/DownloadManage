@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import com.xman.downloadmanagedemo.dao.DownloadDaoUtils;
 import com.xman.downloadmanagedemo.dao.DownloadInfo;
+import com.xman.downloadmanagedemo.network.NetWorkReceiverUtils;
+import com.xman.downloadmanagedemo.network.NetWorkUtils;
 
 /**
  * Created by nieyunlong on 17/6/16.
@@ -23,6 +25,22 @@ public class DownloadHelper {
     private Object o = new Object();
 
     private static DownloadHelper instance;
+
+    public DownloadHelper() {
+        NetWorkReceiverUtils.getInstance().addNetWorkObserver(new NetWorkReceiverUtils.ObserverNetWork() {
+            @Override
+            public void onDisconnect() {
+                LogUtils.e("----->断网了");
+//                pauseNoNetWork();
+            }
+
+            @Override
+            public void onConnect(NetWorkUtils.NetWorkStatus type) {
+                LogUtils.e("----->网络开始连接");
+                startHasNetWork();
+            }
+        });
+    }
 
     public static DownloadHelper getInstance() {
         if (instance == null) {
@@ -67,6 +85,21 @@ public class DownloadHelper {
     public void pauseDownload(Misson misson) {
         ThreadPoolManage.getInstance().pauseMission(misson);
     }
+
+    /**
+     * 不会清理缓存
+     */
+    public void pauseNoNetWork() {
+        ThreadPoolManage.getInstance().workSurrenderNoNetWork();
+    }
+
+    /**
+     * 有网络时候 继续下载
+     */
+    public void startHasNetWork() {
+        ThreadPoolManage.getInstance().startHasNetWork();
+    }
+
 
     /**
      * 用户手动关闭

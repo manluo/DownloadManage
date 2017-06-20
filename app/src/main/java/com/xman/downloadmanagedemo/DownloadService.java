@@ -12,6 +12,7 @@ import com.xman.downloadmanagedemo.dao.MissonSave;
 /**
  * Created by nieyunlong on 17/6/15.
  * adapter 使用广播更新进度
+ * 关于服务什么时候 需要停止 可以在baseActivity里面 查询一次 是否还有任务存在 不存在就杀死服务 @see DownloadHelper.class
  */
 
 public class DownloadService extends Service implements Misson.MissonListener<Misson> {
@@ -73,11 +74,14 @@ public class DownloadService extends Service implements Misson.MissonListener<Mi
 
     @Override
     public void onPause(Misson misson) {
+        misson.setCancel(true);
         sendMissionBroadCast(misson);
     }
 
     @Override
     public void onCancel(Misson misson) {
+        //会走onPause 回调
+        misson.setCancel(true);
         sendMissionBroadCast(misson);
     }
 
@@ -106,7 +110,7 @@ public class DownloadService extends Service implements Misson.MissonListener<Mi
 
     @Override
     public void onDestroy() {
-        LogUtils.e("---->服务死掉===>onDestroy===>重新启动服务");
+        LogUtils.e("---->服务死掉===>onDestroy===>");
         super.onDestroy();
     }
 

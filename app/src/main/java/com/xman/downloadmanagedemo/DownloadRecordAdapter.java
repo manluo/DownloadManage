@@ -82,7 +82,6 @@ public class DownloadRecordAdapter extends DownloadUIBaseAdapter<Misson> {
         }
         if (status == DownloadUiStatus.DOWNLOADING) {
             downloadPercentView.setStatus(DownloadUiStatus.DOWNLOADING.ordinal());
-
         }
         if (status == DownloadUiStatus.DOWNLOAD_WAIT) {
             downloadPercentView.setStatus(DownloadUiStatus.DOWNLOAD_WAIT.ordinal());
@@ -92,6 +91,12 @@ public class DownloadRecordAdapter extends DownloadUIBaseAdapter<Misson> {
         }
         if (status == DownloadUiStatus.DOWNLOAD_SUCCESS) {
             downloadPercentView.setStatus(DownloadUiStatus.DOWNLOAD_SUCCESS.ordinal());
+        }
+        if (status == DownloadUiStatus.DOWNLOAD_RESUME) {
+            downloadPercentView.setStatus(DownloadUiStatus.DOWNLOAD_RESUME.ordinal());
+        }
+        if(status==DownloadUiStatus.DOWNLOAD_FAILED){ //下载失败对应的暂停
+            downloadPercentView.setStatus(DownloadUiStatus.DOWNLOAD_PAUSE.ordinal());
         }
     }
 

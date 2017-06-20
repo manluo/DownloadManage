@@ -51,6 +51,7 @@ public class ThreadPoolManage {
             mMissionBook.get(misson.getmDownloadUrl()).cancel();
         }
     }
+
     public void pauseMission(String missonUrl) {
         if (mMissionBook.containsKey(missonUrl)) {
             mMissionBook.get(missonUrl).cancel();
@@ -64,11 +65,12 @@ public class ThreadPoolManage {
             execute(misson);
         }
     }
+
     public void resumeMission(String downloadUrl) {
-        LogUtils.e("--->恢复执行" +downloadUrl);
+        LogUtils.e("--->恢复执行" + downloadUrl);
         if (mMissionBook.containsKey(downloadUrl)) {
 //            mMissionBook.get(misson.getmDownloadUrl()).resume();
-            LogUtils.e("--->恢复执行" +downloadUrl);
+            LogUtils.e("--->恢复执行" + downloadUrl);
             execute(mMissionBook.get(downloadUrl));
         }
     }
@@ -120,7 +122,7 @@ public class ThreadPoolManage {
         if (misson.isCancel()) { //如果当前的任务已经被取消
             misson.setCancel(false);
         }
-        if(misson.isDone()){ //如果是已经完成的可以继续下载
+        if (misson.isDone()) { //如果是已经完成的可以继续下载
             misson.setDone(false);
         }
         mMissionBook.put(misson.getmDownloadUrl(), misson);
@@ -141,6 +143,28 @@ public class ThreadPoolManage {
         }
     }
 
+    /**
+     * 没有网络的时候 下载的任务全部进行暂停状态 有网络直接开始下载
+     * 不清理缓存 因为用户随时可能连接上网络
+     */
+    public synchronized void workSurrenderNoNetWork() {
+        if (threadPool != null && mMissionBook.size() > 0) {
+            for (Map.Entry<String, Misson> misson : mMissionBook.entrySet()) {
+                misson.getValue().cancel();
+            }
+        }
+    }
+
+    /**
+     * 有网络时所有的任务全部进行
+     */
+    public synchronized void startHasNetWork() {
+        if (threadPool != null && mMissionBook.size() > 0) {
+            for (Map.Entry<String, Misson> missionItem : mMissionBook.entrySet()) {
+                execute(missionItem.getValue());
+            }
+        }
+    }
 
     public synchronized void shutDownWork() {
         if (threadPool != null) {

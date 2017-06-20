@@ -60,8 +60,8 @@ public class DownloadListAdapter extends DownloadUIBaseAdapter<Misson> {
             @Override
             public void onClick(View v) {
 //                finalViewHolder.item_download_btn_pause_download.setVisibility(View.VISIBLE);
-                finalViewHolder.item_download_btn_start_download.setVisibility(View.GONE);
                 DownloadHelper.getInstance().startDownload(data);
+//                finalViewHolder.item_download_btn_start_download.setVisibility(View.GONE);
             }
         });
 //        finalViewHolder.item_download_btn_pause_download.setOnClickListener(new View.OnClickListener() {

@@ -93,9 +93,9 @@ public class Misson implements Runnable, Parcelable {
             if (mFileSize <= 0) {
                 mFileSize = httpUrlConnection.getContentLength();
             }
-            if (mDownloadedSize >= mFileSize) {
+            if (mDownloadedSize >= mFileSize && mFileSize > 0) {
                 setDownloadUiStatus(DownloadUiStatus.DOWNLOAD_SUCCESS);
-                printLog("---->下载成功了");
+                printLog("---->下载成功了"+mDownloadedSize+",mFileSize"+mFileSize);
                 notifySuccess();
                 return;
             }

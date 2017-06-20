@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 
+import com.xman.downloadmanagedemo.network.NetWorkReceiverUtils;
+
 /**
  * Created by nieyunlong on 17/6/12.
  */
@@ -20,6 +22,7 @@ public class Appctx extends Application {
         super.onCreate();
         appctx = this;
         LogUtils.openLog();
+        NetWorkReceiverUtils.getInstance().registerNetWorkReceiver(this);
         CrashHandler.getInstance().init(this);
     }
 

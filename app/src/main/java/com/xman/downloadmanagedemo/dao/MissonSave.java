@@ -55,5 +55,6 @@ public class MissonSave implements Misson.MissonListener<Misson> {
     @Override
     public void onCancel(Misson misson) {
         LogUtils.e("---->数据库===>onCancel===>会回调onPause" + misson.toString());
+        DownloadDaoUtils.saveDownloadRecord(misson);
     }
 }

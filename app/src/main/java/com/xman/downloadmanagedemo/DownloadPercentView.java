@@ -120,12 +120,16 @@ public class DownloadPercentView extends View {
         //仅限UI展示
         if (mStatus == DownloadUiStatus.DOWNLOAD_WAIT.ordinal()) { //准备下载
             canvas.drawBitmap(mWatiImg, 0, 0, null);
-        } else if (mStatus == DownloadUiStatus.DOWNLOAD_PAUSE.ordinal()) { //暂停下载
-            drawPausedView(canvas);
-        } else if (mStatus == DownloadUiStatus.DOWNLOADING.ordinal() || mStatus == DownloadUiStatus.DOWNLOAD_READ.ordinal()) { //正在下载
+        } 
+//        else if (mStatus == DownloadUiStatus.DOWNLOAD_PAUSE.ordinal()) { //暂停下载
+//            drawPausedView(canvas);
+//        }
+        else if (mStatus == DownloadUiStatus.DOWNLOADING.ordinal() || mStatus == DownloadUiStatus.DOWNLOAD_READ.ordinal()) { //正在下载
             drawDownloadingView(canvas);
         } else if (mStatus == DownloadUiStatus.DOWNLOAD_SUCCESS.ordinal()) { //下载成功
             canvas.drawBitmap(finishedImg, 0, 0, null);
+        } else if (mStatus == DownloadUiStatus.DOWNLOAD_RESUME.ordinal() || mStatus == DownloadUiStatus.DOWNLOAD_PAUSE.ordinal()) { //下载按钮
+            canvas.drawBitmap(mNotBeginImg, 0, 0, null);
         }
 
     }

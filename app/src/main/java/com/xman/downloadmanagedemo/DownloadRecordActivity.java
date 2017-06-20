@@ -49,7 +49,7 @@ public class DownloadRecordActivity extends AppCompatActivity {
 //                    } else if (downloadStatusDao == DownloadInfo.DownloadStatus.DOWNLOAD_WAIT.ordinal()) { //正在等待
 //                        misson.setDownloadUiStatus(DownloadUiStatus.DOWNLOAD_WAIT);
 //                    }
-                    adapter.setUIStatus(misson, downloadItem);
+                    adapter.setUIStatusGetDao(misson, downloadItem);
                     listDownload.add(misson);
 //                    downloadHelper.startDownload(misson);
                 }
