@@ -69,7 +69,7 @@ public class Misson implements Runnable, Parcelable {
         RandomAccessFile randomAccessFile = null;
         HttpURLConnection httpUrlConnection = null;
         try {
-            LogUtils.e("---->正在等待连接download");
+            LogUtils.e("---->正在等待连接download" + getDownloadUiStatus());
             setDownloadUiStatus(DownloadUiStatus.DOWNLOAD_READ); //准备下载
             URL uri = new URL(mDownloadUrl);
             httpUrlConnection = (HttpURLConnection) uri.openConnection();
@@ -123,6 +123,7 @@ public class Misson implements Runnable, Parcelable {
                 return;
             }
             setDownloadUiStatus(DownloadUiStatus.DOWNLOAD_SUCCESS);
+            isDone = true;
             printLog("---->下载成功了--->currentName" + currentName);
             notifySuccess();
 
@@ -134,7 +135,6 @@ public class Misson implements Runnable, Parcelable {
         } finally {
             printLog("--->关闭finally");
             try {
-                isDone = true;
                 if (in != null) {
                     in.close();
                 }

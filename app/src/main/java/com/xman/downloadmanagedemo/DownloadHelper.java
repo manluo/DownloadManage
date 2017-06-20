@@ -126,8 +126,9 @@ public class DownloadHelper {
     public void unbindDownloadService() {
         LogUtils.e("--->服务活着吗" + isDownloadServiceRunning());
         if (isDownloadServiceRunning()) {
-            Appctx.getInstance().unbindService(connection);
-            LogUtils.e("--->服务活着吗" + isDownloadServiceRunning());
+            if (connection != null) {
+                Appctx.getInstance().unbindService(connection);
+            }
         }
     }
 

@@ -18,7 +18,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String[] downloadUrl = {"http://gdown.baidu.com/data/wisegame/fb446df5fdbe3680/aiqiyishipin_80612.apk", "http://gdown.baidu.com/data/wisegame/34a6293862d4b5e5/qunaerlvxing_84.apk", "http://gdown.baidu.com/data/wisegame/a381fe31ef817fa5/kugouyinle_7161.apk"};
+    private String[] downloadUrl = {"http://gdown.baidu.com/data/wisegame/fb446df5fdbe3680/aiqiyishipin_80612.apk", "http://gdown.baidu.com/data/wisegame/34a6293862d4b5e5/qunaerlvxing_84.apk", "http://gdown.baidu.com/data/wisegame/a381fe31ef817fa5/kugouyinle_7161.apk","http://gdown.baidu.com/data/wisegame/344aaed52b9a278d/shoujitianmao_79.apk"};
     private List<Misson> list = new ArrayList<>();
 
     private String downloadDir = "download";
@@ -36,10 +36,12 @@ public class MainActivity extends AppCompatActivity {
         Misson missonAiqiyi = new Misson(downloadUrl[0], 0, 0, downloadDir, "aiyiqi.apk");
         Misson missonQunawang = new Misson(downloadUrl[1], 0, 0, downloadDir, "qunawang.apk");
         Misson missonKuGou = new Misson(downloadUrl[2], 0, 0, downloadDir, "kugou.apk");
+        Misson missonTianMao = new Misson(downloadUrl[3], 0, 0, downloadDir, "tianMAO.apk");
         //TODO 判断是否在下载列表 以及数据库中是否有纪录
         list.add(missonAiqiyi);
         list.add(missonQunawang);
         list.add(missonKuGou);
+        list.add(missonTianMao);
         adapter = new DownloadListAdapter(this, list);
         listview.setAdapter(adapter);
         adapter.setContainer(listview);

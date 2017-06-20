@@ -6,11 +6,9 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.xman.downloadmanagedemo.widget.SaundProgressBar;
 
 /**
  * Created by nieyunlong on 17/6/13.
@@ -42,63 +40,59 @@ public class DownloadRecordAdapter extends DownloadUIBaseAdapter<Misson> {
         ViewHolder viewHolder = null;
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView = mLayoutInflater.inflate(R.layout.item_download, null);
-            viewHolder.item_download_name = (TextView) convertView.findViewById(R.id.item_download_name);
-            viewHolder.item_download_status = (TextView) convertView.findViewById(R.id.item_download_status);
-            viewHolder.item_download_regularprogressbar = (SaundProgressBar) convertView.findViewById(R.id.item_download_regularprogressbar);
-            viewHolder.item_download_btn_start_download = (Button) convertView.findViewById(R.id.item_download_btn_start_download);
-            viewHolder.item_download_btn_pause_download = (Button) convertView.findViewById(R.id.item_download_btn_pause_download);
+            convertView = mLayoutInflater.inflate(R.layout.item_download_record, null);
+            viewHolder.status_icon = (DownloadPercentView) convertView.findViewById(R.id.status_icon);
+            viewHolder.name = (TextView) convertView.findViewById(R.id.name);
+            viewHolder.download_percent = (TextView) convertView.findViewById(R.id.download_percent);
+            viewHolder.progressbar = (ProgressBar) convertView.findViewById(R.id.progressbar);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
-        }
-        viewHolder.item_download_btn_start_download.setVisibility(View.GONE);
 
-        viewHolder.item_download_name.setText(data.getSaveName());
+        }
         LogUtils.e("====>数据内容" + data.getDownloadUiStatus());
-
-        if (data.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_PAUSE) { //暂停 按钮是恢复下载 文案描述是暂停下载
-            viewHolder.item_download_btn_pause_download.setText("恢复下载");
-            viewHolder.item_download_status.setText(data.getDownloadUiStatus().getDownloadMsg());
-        } else if (data.getDownloadUiStatus() == DownloadUiStatus.DOWNLOADING) { //正在下载
-            viewHolder.item_download_btn_pause_download.setText(DownloadUiStatus.DOWNLOADING.getDownloadMsg());
-            viewHolder.item_download_status.setText(DownloadUiStatus.DOWNLOADING.getDownloadMsg());
-        } else if (data.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_FAILED) { //下载失败
-            viewHolder.item_download_btn_pause_download.setText("恢复下载");
-            viewHolder.item_download_status.setText(data.getDownloadUiStatus().getDownloadMsg());
-        } else if (data.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_SUCCESS) {
-            viewHolder.item_download_btn_pause_download.setText(DownloadUiStatus.DOWNLOAD_SUCCESS.getDownloadMsg());
-            viewHolder.item_download_btn_pause_download.setEnabled(false);
-            viewHolder.item_download_status.setText(data.getDownloadUiStatus().getDownloadMsg());
-        } else if (data.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_WAIT || data.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_READ) {
-            viewHolder.item_download_btn_pause_download.setText(DownloadUiStatus.DOWNLOAD_WAIT.getDownloadMsg());
-            viewHolder.item_download_btn_pause_download.setEnabled(false);
-            viewHolder.item_download_status.setText(data.getDownloadUiStatus().getDownloadMsg());
-        }
-        final ViewHolder finalViewHolder = viewHolder;
-        finalViewHolder.item_download_btn_pause_download.setVisibility(View.VISIBLE);
-
-        viewHolder.item_download_regularprogressbar.setProgressIndicator(indicator);
-        viewHolder.item_download_regularprogressbar.setProgress(data.getPercentage());
-        viewHolder.item_download_regularprogressbar.setVisibility(View.VISIBLE);
-        finalViewHolder.item_download_btn_pause_download.setOnClickListener(new View.OnClickListener() {
+        setDatas(viewHolder, data);
+        convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LogUtils.e("---->点击了暂停" + System.currentTimeMillis() + ",data.isCancel" + data.isCancel());
-                finalViewHolder.item_download_btn_pause_download.setVisibility(View.VISIBLE);
-                finalViewHolder.item_download_btn_start_download.setVisibility(View.GONE);
-                if (data.isCancel()) {
-                    finalViewHolder.item_download_btn_pause_download.setText("暂停下载");
+                LogUtils.e("===>暂停" + data.isCancel());
+                if (data.isCancel()) { //是暂停
                     DownloadHelper.getInstance().startDownload(data);
                 } else {
-                    //恢复下载
-                    finalViewHolder.item_download_btn_pause_download.setText("恢复下载");
-                    data.setCancel(true);
                     DownloadHelper.getInstance().pauseDownload(data);
                 }
             }
         });
         return convertView;
+    }
+
+    private void setDatas(ViewHolder viewHolder, Misson misson) {
+        viewHolder.name.setText(misson.getSaveName());
+        viewHolder.progressbar.setProgress(misson.getPercentage());
+        viewHolder.download_percent.setText("已下载" + misson.getPercentage() + "%");
+        setIconByStatus(viewHolder.status_icon, misson.getDownloadUiStatus());
+        viewHolder.status_icon.setProgress(misson.getPercentage());
+    }
+
+    private void setIconByStatus(DownloadPercentView downloadPercentView, DownloadUiStatus status) {
+        downloadPercentView.setVisibility(View.VISIBLE);
+
+        if (status == DownloadUiStatus.DOWNLOAD_READ) {
+            downloadPercentView.setStatus(DownloadUiStatus.DOWNLOAD_READ.ordinal());
+        }
+        if (status == DownloadUiStatus.DOWNLOADING) {
+            downloadPercentView.setStatus(DownloadUiStatus.DOWNLOADING.ordinal());
+
+        }
+        if (status == DownloadUiStatus.DOWNLOAD_WAIT) {
+            downloadPercentView.setStatus(DownloadUiStatus.DOWNLOAD_WAIT.ordinal());
+        }
+        if (status == DownloadUiStatus.DOWNLOAD_PAUSE) {
+            downloadPercentView.setStatus(DownloadUiStatus.DOWNLOAD_PAUSE.ordinal());
+        }
+        if (status == DownloadUiStatus.DOWNLOAD_SUCCESS) {
+            downloadPercentView.setStatus(DownloadUiStatus.DOWNLOAD_SUCCESS.ordinal());
+        }
     }
 
     @Override
@@ -120,11 +114,10 @@ public class DownloadRecordAdapter extends DownloadUIBaseAdapter<Misson> {
 
 
     static class ViewHolder {
-        TextView item_download_name; //下载名字
-        TextView item_download_status; //状态
-        SaundProgressBar item_download_regularprogressbar; //下载名字
-        Button item_download_btn_start_download; //开始下载
-        Button item_download_btn_pause_download; //暂停下载
+        DownloadPercentView status_icon; //包含了下载暂停
+        TextView name; //下载的名称
+        TextView download_percent; //下载进度
+        ProgressBar progressbar; //下载的进度
     }
 
 
@@ -136,25 +129,6 @@ public class DownloadRecordAdapter extends DownloadUIBaseAdapter<Misson> {
      */
     public void setDataToView(ViewHolder viewHolder, int itemIndex) {
         Misson dataItem = getItem(itemIndex);
-        viewHolder.item_download_regularprogressbar.setProgress(dataItem.getProgressCurrent());
-//        viewHolder.item_download_status.setText(dataItem.getDownloadUiStatus().getDownloadMsg());
-        if (dataItem.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_PAUSE) { //暂停 按钮是恢复下载 文案描述是暂停下载
-            viewHolder.item_download_btn_pause_download.setText("恢复下载");
-            viewHolder.item_download_status.setText(dataItem.getDownloadUiStatus().getDownloadMsg());
-        } else if (dataItem.getDownloadUiStatus() == DownloadUiStatus.DOWNLOADING) { //正在下载
-            viewHolder.item_download_btn_pause_download.setText(DownloadUiStatus.DOWNLOADING.getDownloadMsg());
-            viewHolder.item_download_status.setText(DownloadUiStatus.DOWNLOADING.getDownloadMsg());
-        } else if (dataItem.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_FAILED) { //下载失败
-            viewHolder.item_download_btn_pause_download.setText("恢复下载");
-            viewHolder.item_download_status.setText(dataItem.getDownloadUiStatus().getDownloadMsg());
-        } else if (dataItem.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_SUCCESS) {
-            viewHolder.item_download_btn_pause_download.setText(DownloadUiStatus.DOWNLOAD_SUCCESS.getDownloadMsg());
-            viewHolder.item_download_btn_pause_download.setEnabled(false);
-            viewHolder.item_download_status.setText(dataItem.getDownloadUiStatus().getDownloadMsg());
-        } else if (dataItem.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_WAIT || dataItem.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_READ) {
-            viewHolder.item_download_btn_pause_download.setText(DownloadUiStatus.DOWNLOAD_WAIT.getDownloadMsg());
-            viewHolder.item_download_btn_pause_download.setEnabled(false);
-            viewHolder.item_download_status.setText(dataItem.getDownloadUiStatus().getDownloadMsg());
-        }
+        setDatas(viewHolder, dataItem);
     }
 }

@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
+import com.xman.downloadmanagedemo.dao.DownloadInfo;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -184,6 +186,25 @@ public abstract class DownloadUIBaseAdapter<T extends Misson> extends BaseAdapte
             }
         }
 
+    }
+
+    /**
+     * 数据库中的状态
+     *
+     * @param downloadInfo 数据库中的数据
+     */
+    public void setUIStatus(Misson mission, DownloadInfo downloadInfo) {
+        int downloadStatusDao = downloadInfo.getDownloadStatus();
+        if (downloadStatusDao == DownloadInfo.DownloadStatus.DOWNLOADING.ordinal()) { //正在下载
+            mission.setDownloadUiStatus(DownloadUiStatus.DOWNLOADING);
+            DownloadHelper.getInstance().startDownload(mission);
+        } else if (downloadStatusDao == DownloadInfo.DownloadStatus.DOWNLOAD_PAUSE.ordinal() || downloadStatusDao == DownloadInfo.DownloadStatus.DOWNLOAD_ERROR.ordinal()) { //暂停下载
+            mission.setDownloadUiStatus(DownloadUiStatus.DOWNLOAD_PAUSE);
+            mission.setCancel(true);
+        } else if (downloadStatusDao == DownloadInfo.DownloadStatus.DOWNLOAD_WAIT.ordinal()) { //正在等待
+            mission.setDownloadUiStatus(DownloadUiStatus.DOWNLOAD_WAIT);
+            DownloadHelper.getInstance().startDownload(mission);
+        }
     }
 
 }

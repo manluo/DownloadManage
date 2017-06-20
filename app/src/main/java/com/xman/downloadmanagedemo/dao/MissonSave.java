@@ -21,7 +21,8 @@ public class MissonSave implements Misson.MissonListener<Misson> {
 
     @Override
     public void onStart(Misson misson) {
-
+        LogUtils.e("---->数据库===>onStart" + misson.toString());
+        DownloadDaoUtils.saveDownloadRecord(misson);
     }
 
     @Override

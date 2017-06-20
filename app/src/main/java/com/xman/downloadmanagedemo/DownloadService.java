@@ -60,10 +60,10 @@ public class DownloadService extends Service implements Misson.MissonListener<Mi
     public void onSuccess(Misson misson) {
         LogUtils.e("---->downloadService====>onSuccess" + misson.getmDownloadUrl());
         sendMissionBroadCast(misson);
-        //如果下载任务没有了 自杀
-        if (ThreadPoolManage.getInstance().getMissionCache() == null || ThreadPoolManage.getInstance().getMissionCache().size() <= 0) {
-            DownloadHelper.getInstance().unbindDownloadService();
-        }
+//        //如果下载任务没有了 自杀
+//        if (ThreadPoolManage.getInstance().getMissionCache() == null || ThreadPoolManage.getInstance().getMissionCache().size() <= 0) {
+//            DownloadHelper.getInstance().unbindDownloadService();
+//        }
     }
 
     @Override
@@ -92,10 +92,15 @@ public class DownloadService extends Service implements Misson.MissonListener<Mi
         if (misson == null) {
             return;
         }
-        ThreadPoolManage.getInstance().addMisson(misson);
+        //如果已经下载了 只需要恢复就可以了 不需要重新add监听执行 其实效果是一样的 内部监听不会重复注册
+        if (ThreadPoolManage.getInstance().getMissionCache().size() > 0 && ThreadPoolManage.getInstance().getMissionCache().contains(misson)) {
+            ThreadPoolManage.getInstance().resumeMission(misson);
+            return;
+        }
         misson.registerMissonListener(new MissonSave());
         misson.registerMissonListener(new MissionListenerForNotification(DownloadService.this));
         misson.registerMissonListener(DownloadService.this);
+        ThreadPoolManage.getInstance().addMisson(misson);
         ThreadPoolManage.getInstance().execute(misson);
     }
 

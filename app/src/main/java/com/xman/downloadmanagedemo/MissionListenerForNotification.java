@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.app.NotificationCompat;
 
 import java.util.Timer;
@@ -34,19 +35,20 @@ public class MissionListenerForNotification implements Misson.MissonListener<Mis
     @Override
     public void onStart(Misson misson) {
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-//        cancelPendingIntent = MissionActionReceiver.buildReceiverPendingIntent(context, MissionActionReceiver.MISSION_TYPE.CANCEL_MISSION, mission.getMissionID());
-//        pausePendingIntent = MissionActionReceiver.buildReceiverPendingIntent(context, MissionActionReceiver.MISSION_TYPE.PAUSE_MISSION, mission.getMissionID());
-//        resumePendingIntent = MissionActionReceiver.buildReceiverPendingIntent(context, MissionActionReceiver.MISSION_TYPE.RESUME_MISSION, mission.getMissionID());
-//        contentIntent = new Intent(context, DownloadActivity.class);
-//        contentPendingIntent = PendingIntent.getActivity(context,0,contentIntent,Intent.FLAG_ACTIVITY_NEW_TASK);
+        cancelPendingIntent = MissionActionReceiver.buildReceiverPendingIntent(context, MissionActionReceiver.MISSION_TYPE.CANCEL_MISSION, misson.getMissionID(), misson.getmDownloadUrl());
+        pausePendingIntent = MissionActionReceiver.buildReceiverPendingIntent(context, MissionActionReceiver.MISSION_TYPE.PAUSE_MISSION, misson.getMissionID(), misson.getmDownloadUrl());
+        resumePendingIntent = MissionActionReceiver.buildReceiverPendingIntent(context, MissionActionReceiver.MISSION_TYPE.RESUME_MISSION, misson.getMissionID(), misson.getmDownloadUrl());
+
+        contentIntent = new Intent(context, DownloadRecordActivity.class);
+        contentPendingIntent = PendingIntent.getActivity(context, 0, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         notifyBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(android.R.drawable.stat_sys_download)
                 .setContentTitle(misson.getSaveName())
                 .setContentText("准备下载")
                 .setProgress(100, 100, true)
                 .setContentInfo("0%")
-//                .addAction(R.drawable.ic_action_coffee,context.getString(R.string.download_pause), pausePendingIntent)
-//                .addAction(R.drawable.ic_action_cancel,context.getString(R.string.download_cancel), cancelPendingIntent)
+                .addAction(R.drawable.ic_action_coffee, "暂停", pausePendingIntent)
+                .addAction(R.drawable.ic_action_cancel, "取消", cancelPendingIntent)
                 .setContentIntent(contentPendingIntent)
                 .setOngoing(true);
         notificationManager.notify(misson.getMissionID(), notifyBuilder.build());
@@ -91,7 +93,17 @@ public class MissionListenerForNotification implements Misson.MissonListener<Mis
 
     @Override
     public void onPause(Misson misson) {
-
+        notifyBuilder = new NotificationCompat.Builder(context)
+                .setSmallIcon(android.R.drawable.stat_sys_download)
+                .setContentTitle(misson.getSaveName())
+                .setContentText("暂停")
+                .setProgress(100, misson.getPercentage(), false)
+                .setContentInfo(misson.getPercentage() + "%")
+                .addAction(R.drawable.ic_action_rocket, "恢复下载", resumePendingIntent)
+                .addAction(R.drawable.ic_action_cancel, "取消下载", cancelPendingIntent)
+                .setContentIntent(contentPendingIntent)
+                .setOngoing(true);
+        notificationManager.notify(misson.getMissionID(), notifyBuilder.build());
     }
 
     @Override

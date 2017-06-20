@@ -22,9 +22,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DownloadRecordActivity" />
+        <activity
+            android:name=".DownloadRecordActivity"
+            android:launchMode="singleTop" />
 
         <service android:name=".DownloadService" />
+        <receiver android:name=".MissionActionReceiver" />
     </application>
 
 </manifest>

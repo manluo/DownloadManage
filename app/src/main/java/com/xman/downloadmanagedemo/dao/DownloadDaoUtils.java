@@ -31,6 +31,8 @@ public class DownloadDaoUtils {
             downloadInfo.setDownloadStatus(DownloadInfo.DownloadStatus.DOWNLOAD_SUCCESS.ordinal());
         } else if (misson.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_FAILED) { //失败了
             downloadInfo.setDownloadStatus(DownloadInfo.DownloadStatus.DOWNLOAD_ERROR.ordinal());
+        } else if (misson.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_WAIT) {  //等待下载
+            downloadInfo.setDownloadStatus(DownloadInfo.DownloadStatus.DOWNLOAD_WAIT.ordinal());
         } else {
             downloadInfo.setDownloadStatus(DownloadInfo.DownloadStatus.DOWNLOADING.ordinal());
         }
@@ -133,7 +135,7 @@ public class DownloadDaoUtils {
     public static synchronized List<DownloadInfo> getDownloading() {
         DownloadInfoDao downloadDao = EntityManager.getInstance().getDownloadDao();
         if (downloadDao != null) {
-            List<DownloadInfo> downloadList = downloadDao.queryBuilder().where(DownloadInfoDao.Properties.DownloadStatus.between(0, 2)).build().list();
+            List<DownloadInfo> downloadList = downloadDao.queryBuilder().where(DownloadInfoDao.Properties.DownloadStatus.in(DownloadInfo.DownloadStatus.DOWNLOADING.ordinal(), DownloadInfo.DownloadStatus.DOWNLOAD_WAIT.ordinal(), DownloadInfo.DownloadStatus.DOWNLOAD_PAUSE.ordinal(), DownloadInfo.DownloadStatus.DOWNLOAD_ERROR.ordinal())).build().list();
             if (downloadList != null) {
                 return downloadList;
             }

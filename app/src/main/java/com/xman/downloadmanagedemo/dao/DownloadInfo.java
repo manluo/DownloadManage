@@ -148,8 +148,8 @@ public class DownloadInfo {
 
     public enum DownloadStatus {
         /**
-         * 正在下载 暂停下载 下载失败 下载成功
+         * 等待下载 正在下载 暂停下载 下载失败 下载成功
          */
-        DOWNLOADING, DOWNLOAD_PAUSE, DOWNLOAD_ERROR, DOWNLOAD_SUCCESS;
+        DOWNLOAD_WAIT,DOWNLOADING, DOWNLOAD_PAUSE, DOWNLOAD_ERROR, DOWNLOAD_SUCCESS;
     }
 }

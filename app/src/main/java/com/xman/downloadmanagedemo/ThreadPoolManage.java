@@ -51,12 +51,25 @@ public class ThreadPoolManage {
             mMissionBook.get(misson.getmDownloadUrl()).cancel();
         }
     }
+    public void pauseMission(String missonUrl) {
+        if (mMissionBook.containsKey(missonUrl)) {
+            mMissionBook.get(missonUrl).cancel();
+        }
+    }
 
     public void resumeMission(Misson misson) {
         if (mMissionBook.containsKey(misson.getmDownloadUrl())) {
 //            mMissionBook.get(misson.getmDownloadUrl()).resume();
             LogUtils.e("--->恢复执行" + misson.getmDownloadUrl());
             execute(misson);
+        }
+    }
+    public void resumeMission(String downloadUrl) {
+        LogUtils.e("--->恢复执行" +downloadUrl);
+        if (mMissionBook.containsKey(downloadUrl)) {
+//            mMissionBook.get(misson.getmDownloadUrl()).resume();
+            LogUtils.e("--->恢复执行" +downloadUrl);
+            execute(mMissionBook.get(downloadUrl));
         }
     }
 
@@ -106,6 +119,9 @@ public class ThreadPoolManage {
         }
         if (misson.isCancel()) { //如果当前的任务已经被取消
             misson.setCancel(false);
+        }
+        if(misson.isDone()){ //如果是已经完成的可以继续下载
+            misson.setDone(false);
         }
         mMissionBook.put(misson.getmDownloadUrl(), misson);
         threadPool.execute(misson);
