@@ -10,6 +10,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.xman.downloadmanagedemo.utils.LogUtils;
+
 /**
  * Created by nieyunlong on 17/6/13.
  * 从数据库里面拿数据

@@ -1,7 +1,7 @@
 package com.xman.downloadmanagedemo.dao;
 
 import com.xman.downloadmanagedemo.DownloadUiStatus;
-import com.xman.downloadmanagedemo.LogUtils;
+import com.xman.downloadmanagedemo.utils.LogUtils;
 import com.xman.downloadmanagedemo.Misson;
 import com.xman.downloadmanagedemo.gen.DownloadInfoDao;
 

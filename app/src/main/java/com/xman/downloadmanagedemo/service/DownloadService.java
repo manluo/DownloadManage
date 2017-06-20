@@ -1,4 +1,4 @@
-package com.xman.downloadmanagedemo;
+package com.xman.downloadmanagedemo.service;
 
 import android.app.Service;
 import android.content.Intent;
@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
+import com.xman.downloadmanagedemo.utils.LogUtils;
+import com.xman.downloadmanagedemo.MissionListenerForNotification;
+import com.xman.downloadmanagedemo.Misson;
+import com.xman.downloadmanagedemo.ThreadPoolManage;
 import com.xman.downloadmanagedemo.dao.MissonSave;
 
 /**

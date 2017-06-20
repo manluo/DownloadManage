@@ -1,4 +1,4 @@
-package com.xman.downloadmanagedemo;
+package com.xman.downloadmanagedemo.utils;
 
 /**
  * Created by nieyunlong on 17/6/19.

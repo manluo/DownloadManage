@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 
-import com.xman.downloadmanagedemo.LogUtils;
+import com.xman.downloadmanagedemo.utils.LogUtils;
 import com.xman.downloadmanagedemo.gen.DaoMaster;
 import com.xman.downloadmanagedemo.gen.DownloadInfoDao;
 

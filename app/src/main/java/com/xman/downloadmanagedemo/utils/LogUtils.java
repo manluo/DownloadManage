@@ -13,13 +13,16 @@
  * limitations under the License.
  */
 
-package com.xman.downloadmanagedemo;
+package com.xman.downloadmanagedemo.utils;
 
 
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 
+
+import com.xman.downloadmanagedemo.Appctx;
+import com.xman.downloadmanagedemo.Config;
 
 import java.io.BufferedWriter;
 import java.io.File;

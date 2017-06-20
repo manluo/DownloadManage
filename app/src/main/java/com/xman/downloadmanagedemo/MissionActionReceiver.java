@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.xman.downloadmanagedemo.utils.FileUtil;
+import com.xman.downloadmanagedemo.utils.LogUtils;
+
 public class MissionActionReceiver extends BroadcastReceiver {
 
     private static final String TAG = "MissionActionReceiver";

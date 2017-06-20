@@ -4,6 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.xman.downloadmanagedemo.utils.FileUtils;
+import com.xman.downloadmanagedemo.utils.LogUtils;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -12,6 +12,8 @@ import com.xman.downloadmanagedemo.dao.DownloadDaoUtils;
 import com.xman.downloadmanagedemo.dao.DownloadInfo;
 import com.xman.downloadmanagedemo.network.NetWorkReceiverUtils;
 import com.xman.downloadmanagedemo.network.NetWorkUtils;
+import com.xman.downloadmanagedemo.service.DownloadService;
+import com.xman.downloadmanagedemo.utils.LogUtils;
 
 /**
  * Created by nieyunlong on 17/6/16.

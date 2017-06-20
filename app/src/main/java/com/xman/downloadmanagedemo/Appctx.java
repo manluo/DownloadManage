@@ -1,13 +1,10 @@
 package com.xman.downloadmanagedemo;
 
 import android.app.Application;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.IBinder;
 
 import com.xman.downloadmanagedemo.network.NetWorkReceiverUtils;
+import com.xman.downloadmanagedemo.utils.CrashHandler;
+import com.xman.downloadmanagedemo.utils.LogUtils;
 
 /**
  * Created by nieyunlong on 17/6/12.

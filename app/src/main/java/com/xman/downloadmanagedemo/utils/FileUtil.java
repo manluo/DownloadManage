@@ -1,4 +1,4 @@
-package com.xman.downloadmanagedemo;
+package com.xman.downloadmanagedemo.utils;
 
 import java.io.File;
 import java.io.IOException;

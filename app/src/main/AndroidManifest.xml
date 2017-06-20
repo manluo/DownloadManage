@@ -28,7 +28,7 @@
             android:name=".DownloadRecordActivity"
             android:launchMode="singleTop" />
 
-        <service android:name=".DownloadService" />
+        <service android:name=".service.DownloadService" />
         <receiver android:name=".MissionActionReceiver" />
     </application>
 

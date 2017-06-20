@@ -8,11 +8,10 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 import com.xman.downloadmanagedemo.dao.DownloadInfo;
+import com.xman.downloadmanagedemo.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.xman.downloadmanagedemo.R.id.listview_record;
 
 /**
  * Created by nieyunlong

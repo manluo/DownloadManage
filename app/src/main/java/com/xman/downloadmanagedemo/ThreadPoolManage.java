@@ -1,5 +1,7 @@
 package com.xman.downloadmanagedemo;
 
+import com.xman.downloadmanagedemo.utils.LogUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;

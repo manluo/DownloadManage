@@ -10,8 +10,8 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.xman.downloadmanagedemo.dao.DownloadDaoUtils;
-import com.xman.downloadmanagedemo.dao.DownloadInfo;
+import com.xman.downloadmanagedemo.service.DownloadService;
+import com.xman.downloadmanagedemo.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;

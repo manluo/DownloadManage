@@ -1,4 +1,4 @@
-package com.xman.downloadmanagedemo;
+package com.xman.downloadmanagedemo.utils;
 
 import android.content.Context;
 import android.util.Log;
