@@ -154,6 +154,7 @@ public class DownloadHelper {
                 mDownloadServiceBinder.getService().onDelete(misson);
                 DownloadDaoUtils.deleteDownloadRecord(misson);
                 MissionNofiticaionUtils.deleteNotifyById(Appctx.getInstance(), misson.getMissionID());
+                ThreadPoolManage.getInstance().removeMissionCache(misson);
             }
         }.start();
     }

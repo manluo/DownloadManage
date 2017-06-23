@@ -181,9 +181,23 @@ public class Misson implements Runnable, Parcelable {
     }
 
     /**
+     * 重置数据
+     */
+    public void setRestMissionData() {
+        isDelete = false;
+        isPause = false;
+        isCancel = false;
+        progressCurrent = 0;
+        downloadUiStatus = DownloadUiStatus.DOWNLOAD_WAIT;
+        mDownloadedSize = 0;
+        mFileSize = 0;
+        isDone=false;
+    }
+
+    /**
      * 删除任务以及文件 如果暂停状态
      */
-    public void delete(){
+    public void delete() {
         setDelete(true);
     }
 
@@ -395,7 +409,6 @@ public class Misson implements Runnable, Parcelable {
         void onDelete(T misson); //删除下载记录
 
     }
-
 
     @Override
     public int describeContents() {
