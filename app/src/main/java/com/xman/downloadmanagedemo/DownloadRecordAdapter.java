@@ -12,7 +12,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.xman.downloadmanagedemo.utils.LogUtils;
-import com.xman.downloadmanagedemo.widget.SwipeMenuLayout;
 
 /**
  * Created by nieyunlong on 17/6/13.
