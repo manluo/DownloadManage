@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.xman.downloadmanagedemo.utils.LogUtils;
 import com.xman.downloadmanagedemo.widget.SaundProgressBar;
 
 import java.util.List;
@@ -126,5 +127,21 @@ public class DownloadListAdapter extends DownloadUIBaseAdapter<Misson> {
     private void setDataToUi(ViewHolder viewHolder, int itemIndex) {
         Misson dataItem = getItem(itemIndex);
         viewHolder.item_download_regularprogressbar.setProgress(dataItem.getProgressCurrent());
+        if (dataItem.isDelete()) { //删除了
+            LogUtils.e("---->删除了文件");
+            if (downloadingList != null && downloadingList.size() > itemIndex) {
+                downloadingList.remove(itemIndex);
+                notifyDataSetChanged();
+            }
+            return;
+        }
+        if (dataItem.getDownloadUiStatus() == DownloadUiStatus.DOWNLOAD_SUCCESS) { //下载成功
+            LogUtils.e("---->删除了文件===>下载成功");
+            if (downloadingList != null && downloadingList.size() > itemIndex) {
+                downloadingList.remove(itemIndex);
+                notifyDataSetChanged();
+            }
+            return;
+        }
     }
 }

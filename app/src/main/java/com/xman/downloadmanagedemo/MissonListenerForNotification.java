@@ -150,6 +150,11 @@ public class MissonListenerForNotification implements Misson.MissonListener<Miss
         notificationManager.notify(misson.getMissionID(), mBuilder.build());
     }
 
+    @Override
+    public void onDelete(Misson misson) {
+        notificationManager.cancel(misson.getMissionID());
+    }
+
     public void cancelTimer(final Misson misson) {
         new Timer().schedule(new TimerTask() {
             @Override
@@ -158,4 +163,5 @@ public class MissonListenerForNotification implements Misson.MissonListener<Miss
             }
         }, 10000);
     }
+
 }

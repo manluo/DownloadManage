@@ -113,6 +113,11 @@ public class MissionListenerForNotification implements Misson.MissonListener<Mis
         notificationManager.notify(misson.getMissionID(), notifyBuilder.build());
     }
 
+    @Override
+    public void onDelete(Misson misson) {
+        notificationManager.cancel(misson.getMissionID());
+    }
+
     public void cancelTimer(final Misson misson) {
         new Timer().schedule(new TimerTask() {
             @Override

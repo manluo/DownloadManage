@@ -7,12 +7,11 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import com.xman.downloadmanagedemo.MissonListenerForNotification;
-import com.xman.downloadmanagedemo.utils.LogUtils;
-import com.xman.downloadmanagedemo.MissionListenerForNotification;
 import com.xman.downloadmanagedemo.Misson;
+import com.xman.downloadmanagedemo.MissonListenerForNotification;
 import com.xman.downloadmanagedemo.ThreadPoolManage;
 import com.xman.downloadmanagedemo.dao.MissonSave;
+import com.xman.downloadmanagedemo.utils.LogUtils;
 
 /**
  * Created by nieyunlong on 17/6/15.
@@ -87,6 +86,12 @@ public class DownloadService extends Service implements Misson.MissonListener<Mi
     public void onCancel(Misson misson) {
         //会走onPause 回调
         misson.setCancel(true);
+        sendMissionBroadCast(misson);
+    }
+
+    @Override
+    public void onDelete(Misson misson) {
+        //删除
         sendMissionBroadCast(misson);
     }
 

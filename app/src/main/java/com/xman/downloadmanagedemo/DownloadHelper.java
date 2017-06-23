@@ -86,7 +86,6 @@ public class DownloadHelper {
 
 
     /**
-     *
      * @param misson
      */
     public void pauseDownload(Misson misson) {
@@ -120,6 +119,43 @@ public class DownloadHelper {
             ThreadPoolManage.getInstance().workSurrender();
         }
         DownloadHelper.getInstance().unbindDownloadService();
+    }
+
+    /**
+     * 删除
+     * @param misson
+     */
+    public void deleteDownload(final Misson misson) {
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                LogUtils.e("--->服务活着吗" + isDownloadServiceRunning());
+                if (!isDownloadServiceRunning()) {
+                    Appctx.getInstance().startService(new Intent(Appctx.getInstance(),
+                            DownloadService.class));
+                }
+                if (mDownloadServiceBinder == null || !isConnected) {
+                    Appctx.getInstance().bindService(new Intent(Appctx.getInstance(),
+                                    DownloadService.class), connection,
+                            Context.BIND_AUTO_CREATE);
+                    synchronized (o) {
+                        while (!isConnected) {
+                            try {
+                                o.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+                misson.delete();
+                //使用这个方法 以免任务正在暂停状态以及
+                mDownloadServiceBinder.getService().onDelete(misson);
+                DownloadDaoUtils.deleteDownloadRecord(misson);
+                MissionNofiticaionUtils.deleteNotifyById(Appctx.getInstance(), misson.getMissionID());
+            }
+        }.start();
     }
 
     public void download(final Misson misson) {

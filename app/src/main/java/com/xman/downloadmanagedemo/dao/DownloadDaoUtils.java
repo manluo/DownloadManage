@@ -64,12 +64,23 @@ public class DownloadDaoUtils {
      * @param misson
      */
     public synchronized static void deleteDownloadRecord(Misson misson) {
-
-        DownloadInfo findDownloadRecord = EntityManager.getInstance().getDownloadDao().queryBuilder().where(DownloadInfoDao.Properties.DownloadUrl.eq(misson.getmDownloadUrl())).build().unique();
+        DownloadInfoDao downloadDao = EntityManager.getInstance().getDownloadDao();
+        DownloadInfo findDownloadRecord = downloadDao.queryBuilder().where(DownloadInfoDao.Properties.DownloadUrl.eq(misson.getmDownloadUrl())).build().unique();
         if (findDownloadRecord != null) {
             LogUtils.e("=======>数据库查询到下载数据" + findDownloadRecord.getDownloadUrl());
+            downloadDao.delete(findDownloadRecord);
         } else {
             LogUtils.e("=======>数据库没有查询到下载数据===>error" + misson.getmDownloadUrl());
+        }
+    }
+    public synchronized static void deleteAllDownloadRecord() {
+        DownloadInfoDao downloadDao = EntityManager.getInstance().getDownloadDao();
+        List<DownloadInfo> downloadList = downloadDao.queryBuilder().where(DownloadInfoDao.Properties.DownloadStatus.in(DownloadInfo.DownloadStatus.DOWNLOADING.ordinal(), DownloadInfo.DownloadStatus.DOWNLOAD_WAIT.ordinal(), DownloadInfo.DownloadStatus.DOWNLOAD_PAUSE.ordinal(), DownloadInfo.DownloadStatus.DOWNLOAD_ERROR.ordinal())).build().list();
+        if (downloadList != null) {
+            LogUtils.e("=======>数据库查询到下载数据");
+            downloadDao.deleteInTx(downloadList);
+        } else {
+            LogUtils.e("=======>数据库没有查询到下载数据===>error");
         }
     }
 

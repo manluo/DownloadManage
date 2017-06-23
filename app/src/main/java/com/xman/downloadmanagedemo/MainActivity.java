@@ -1,5 +1,6 @@
 package com.xman.downloadmanagedemo;
 
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String[] downloadUrl = {"http://gdown.baidu.com/data/wisegame/fb446df5fdbe3680/aiqiyishipin_80612.apk", "http://gdown.baidu.com/data/wisegame/34a6293862d4b5e5/qunaerlvxing_84.apk", "http://gdown.baidu.com/data/wisegame/a381fe31ef817fa5/kugouyinle_7161.apk","http://gdown.baidu.com/data/wisegame/344aaed52b9a278d/shoujitianmao_79.apk"};
+    private String[] downloadUrl = {"http://gdown.baidu.com/data/wisegame/fb446df5fdbe3680/aiqiyishipin_80612.apk", "http://gdown.baidu.com/data/wisegame/34a6293862d4b5e5/qunaerlvxing_84.apk", "http://gdown.baidu.com/data/wisegame/a381fe31ef817fa5/kugouyinle_7161.apk", "http://gdown.baidu.com/data/wisegame/344aaed52b9a278d/shoujitianmao_79.apk"};
     private List<Misson> list = new ArrayList<>();
 
     private String downloadDir = "download";
@@ -67,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
         DownloadHelper.getInstance().stopAllDownload();
         unregisterReceiver(missionBradCast);
+        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.cancelAll();
     }
 
     private class MissionBroadCast extends BroadcastReceiver {

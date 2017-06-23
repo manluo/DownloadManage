@@ -15,7 +15,6 @@ import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by nieyunlong on 17/6/12.
@@ -52,6 +51,8 @@ public class Misson implements Runnable, Parcelable {
     private boolean isCancel;
 
     private boolean isDone;
+    /*删除*/
+    private boolean isDelete;
 
 
     public Misson(String downloadUrl, long downloadedSize, long fileSize, String saveDir, String saveName) {
@@ -66,8 +67,18 @@ public class Misson implements Runnable, Parcelable {
 
     @Override
     public void run() {
-        notifyStartMisson();
         String currentName = Thread.currentThread().getName();
+        if (isDelete()) { //删除
+            printLog("--->删除" + currentName);
+            notifyDelete();
+            return;
+        }
+        if (isCancel()) { //被打断
+            printLog("--->取消" + currentName);
+            notifyCancel();
+            return;
+        }
+        notifyStartMisson();
         InputStream in = null;
         RandomAccessFile randomAccessFile = null;
         HttpURLConnection httpUrlConnection = null;
@@ -109,7 +120,7 @@ public class Misson implements Runnable, Parcelable {
             randomAccessFile.seek(mDownloadedSize);
             byte[] bytes = new byte[1024];
             int count;
-            while (!isCancel() && (count = in.read(bytes, 0, 1024)) != -1) { //读   到头是-1
+            while (!isDelete() && !isCancel() && (count = in.read(bytes, 0, 1024)) != -1) { //读   到头是-1
                 if (count != 0) {
                     randomAccessFile.write(bytes, 0, count);
                     mDownloadedSize += count;
@@ -120,11 +131,17 @@ public class Misson implements Runnable, Parcelable {
                     }
                 }
             }
+            if (isDelete()) { //删除
+                printLog("--->删除" + currentName);
+                notifyDelete();
+                return;
+            }
             if (isCancel()) { //被打断
                 printLog("--->被打断" + currentName);
                 notifyCancel();
                 return;
             }
+
             setDownloadUiStatus(DownloadUiStatus.DOWNLOAD_SUCCESS);
             isDone = true;
             printLog("---->下载成功了--->currentName" + currentName);
@@ -161,6 +178,13 @@ public class Misson implements Runnable, Parcelable {
         isCancel = true;
         setDownloadUiStatus(DownloadUiStatus.DOWNLOAD_PAUSE);
         notifyPause();
+    }
+
+    /**
+     * 删除任务以及文件 如果暂停状态
+     */
+    public void delete(){
+        setDelete(true);
     }
 
     //通知进度改变
@@ -200,6 +224,14 @@ public class Misson implements Runnable, Parcelable {
         if (listObserver != null && listObserver.size() != 0) {
             for (MissonListener<Misson> l : listObserver) {
                 l.onFailed(this);
+            }
+        }
+    }
+
+    private final void notifyDelete() {
+        if (listObserver != null && listObserver.size() != 0) {
+            for (MissonListener<Misson> l : listObserver) {
+                l.onDelete(this);
             }
         }
     }
@@ -316,6 +348,13 @@ public class Misson implements Runnable, Parcelable {
         return MissionID;
     }
 
+    public boolean isDelete() {
+        return isDelete;
+    }
+
+    private void setDelete(boolean delete) {
+        isDelete = delete;
+    }
 
     public void registerMissonListener(MissonListener<Misson> listener) {
         if (listener != null) {
@@ -353,24 +392,8 @@ public class Misson implements Runnable, Parcelable {
 
         void onCancel(T misson);
 
-    }
+        void onDelete(T misson); //删除下载记录
 
-    @Override
-    public String toString() {
-        return "Misson{" +
-                "mDownloadUrl='" + mDownloadUrl + '\'' +
-                ", mDownloadedSize=" + mDownloadedSize +
-                ", mFileSize=" + mFileSize +
-                ", mSaveDir='" + mSaveDir + '\'' +
-                ", mSaveName='" + mSaveName + '\'' +
-                ", progressCurrent=" + progressCurrent +
-                ", listObserver=" + listObserver +
-                ", downloadUiStatus=" + downloadUiStatus +
-                ", o=" + o +
-                ", isPause=" + isPause +
-                ", isCancel=" + isCancel +
-                ", isDone=" + isDone +
-                '}';
     }
 
 
@@ -392,6 +415,7 @@ public class Misson implements Runnable, Parcelable {
         dest.writeByte(this.isPause ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isCancel ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isDone ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isDelete ? (byte) 1 : (byte) 0);
     }
 
     protected Misson(Parcel in) {
@@ -407,6 +431,7 @@ public class Misson implements Runnable, Parcelable {
         this.isPause = in.readByte() != 0;
         this.isCancel = in.readByte() != 0;
         this.isDone = in.readByte() != 0;
+        this.isDelete = in.readByte() != 0;
     }
 
     public static final Creator<Misson> CREATOR = new Creator<Misson>() {
@@ -420,4 +445,24 @@ public class Misson implements Runnable, Parcelable {
             return new Misson[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "Misson{" +
+                "MissionID=" + MissionID +
+                ", mDownloadUrl='" + mDownloadUrl + '\'' +
+                ", mDownloadedSize=" + mDownloadedSize +
+                ", mFileSize=" + mFileSize +
+                ", mSaveDir='" + mSaveDir + '\'' +
+                ", mSaveName='" + mSaveName + '\'' +
+                ", progressCurrent=" + progressCurrent +
+                ", listObserver=" + listObserver +
+                ", downloadUiStatus=" + downloadUiStatus +
+                ", o=" + o +
+                ", isPause=" + isPause +
+                ", isCancel=" + isCancel +
+                ", isDone=" + isDone +
+                ", isDelete=" + isDelete +
+                '}';
+    }
 }
